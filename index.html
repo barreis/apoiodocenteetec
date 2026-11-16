@@ -230,8 +230,18 @@
                   <option value="Anos Finais (6º e 7º ano)" selected>Anos Finais (6º e 7º ano)</option>
                   <option value="Anos Finais (8º e 9º ano)">Anos Finais (8º e 9º ano)</option>
                   <option value="Ensino Médio">Ensino Médio</option>
+                  <option value="Ensino Técnico - 1º Módulo (Subsequente / Concomitante)">Ensino Técnico - 1º Módulo (Subsequente / Concomitante)</option>
+                  <option value="Ensino Técnico - 2º Módulo (Subsequente / Concomitante)">Ensino Técnico - 2º Módulo (Subsequente / Concomitante)</option>
+                  <option value="Ensino Técnico - 3º Módulo (Subsequente / Concomitante)">Ensino Técnico - 3º Módulo (Subsequente / Concomitante)</option>
+                  <option value="Ensino Técnico Integrado ao Médio - 1º Módulo / 1ª Série">Ensino Técnico Integrado ao Médio - 1º Módulo / 1ª Série</option>
+                  <option value="Ensino Técnico Integrado ao Médio - 2º Módulo / 2ª Série">Ensino Técnico Integrado ao Médio - 2º Módulo / 2ª Série</option>
+                  <option value="Ensino Técnico Integrado ao Médio - 3º Módulo / 3ª Série">Ensino Técnico Integrado ao Médio - 3º Módulo / 3ª Série</option>
                   <option value="EJA (Educação de Jovens e Adultos)">EJA (Educação de Jovens e Adultos)</option>
                 </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tema / Objeto de Conhecimento / Competência Técnica *</label>
+                <input type="text" id="tema" placeholder="Ex: Sistema Solar, Lógica de Programação, Biossegurança, Frações..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
               </div>
               <div class="sm:col-span-2">
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tema / Objeto de Conhecimento *</label>
@@ -265,6 +275,7 @@
                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Cenário e Recursos Disponíveis na Escola</label>
                 <select id="cenarioEscola" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-brand-500 outline-none">
                   <option value="Sala tradicional com quadro, projetor/TV e materiais impressos">Sala tradicional com quadro, projetor/TV e materiais impressos</option>
+                  <option value="Laboratório Técnico / Oficina Prática / Bancadas e Equipamentos">Laboratório Técnico / Oficina Prática / Bancadas e Equipamentos</option>
                   <option value="Escola sem projetor/internet (apenas quadro, papel, cartolina e materiais recicláveis)">Escola sem projetor/internet (apenas quadro, papel e materiais táteis/recicláveis)</option>
                   <option value="Sala de recursos / Laboratório com computadores, tablets ou internet">Sala com acesso a dispositivos digitais (tablets/celulares/computadores)</option>
                   <option value="Pátio, quadra ou espaço aberto ao ar livre">Espaço amplo / Pátio / Ambiente externo</option>
@@ -969,34 +980,51 @@
 
     // Alternar Abas
     function switchTab(tabName) {
-      ['planejamento', 'atividade', 'avaliacao', 'folha', 'slides'].forEach(t => {
-        document.getElementById(`view-${t}`).classList.add('hidden');
-        const btn = document.getElementById(`tab-btn-${t}`);
-        if (btn) {
-          btn.classList.remove('bg-white', 'text-brand-700', 'shadow-sm', 'font-bold');
-          btn.classList.add('text-slate-600', 'font-semibold');
-        }
-        const mBtn = document.getElementById(`mob-btn-${t}`);
-        if (mBtn) {
-          mBtn.classList.remove('bg-white', 'text-brand-700', 'shadow-sm', 'font-bold');
-          mBtn.classList.add('text-slate-600', 'font-semibold');
-        }
-      });
+      try {
+        ['planejamento', 'atividade', 'avaliacao', 'folha', 'slides'].forEach(t => {
+          const viewEl = document.getElementById(`view-${t}`);
+          if (viewEl) viewEl.classList.add('hidden');
+          const btn = document.getElementById(`tab-btn-${t}`);
+          if (btn) {
+            btn.classList.remove('bg-white', 'text-brand-700', 'shadow-sm', 'font-bold');
+            btn.classList.add('text-slate-600', 'font-semibold');
+          }
+          const mBtn = document.getElementById(`mob-btn-${t}`);
+          if (mBtn) {
+            mBtn.classList.remove('bg-white', 'text-brand-700', 'shadow-sm', 'font-bold');
+            mBtn.classList.add('text-slate-600', 'font-semibold');
+          }
+        });
 
-      document.getElementById(`view-${tabName}`).classList.remove('hidden');
-      const activeBtn = document.getElementById(`tab-btn-${tabName}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-white', 'text-brand-700', 'shadow-sm', 'font-bold');
-        activeBtn.classList.remove('text-slate-600', 'font-semibold');
-      }
-      const activeMob = document.getElementById(`mob-btn-${tabName}`);
-      if (activeMob) {
-        activeMob.classList.add('bg-white', 'text-brand-700', 'shadow-sm', 'font-bold');
-        activeMob.classList.remove('text-slate-600', 'font-semibold');
-      }
+        const targetView = document.getElementById(`view-${tabName}`);
+        if (targetView) targetView.classList.remove('hidden');
 
-      if (tabName === 'slides' && estadoAula.slides.length === 0) {
-        gerarPlanejamentoCompleto(false);
+        const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+        if (activeBtn) {
+          activeBtn.classList.add('bg-white', 'text-brand-700', 'shadow-sm', 'font-bold');
+          activeBtn.classList.remove('text-slate-600', 'font-semibold');
+        }
+        const activeMob = document.getElementById(`mob-btn-${tabName}`);
+        if (activeMob) {
+          activeMob.classList.add('bg-white', 'text-brand-700', 'shadow-sm', 'font-bold');
+          activeMob.classList.remove('text-slate-600', 'font-semibold');
+        }
+
+        if (tabName !== 'planejamento') {
+          coletarDadosFormulario();
+          if (tabName === 'atividade') renderizarAtividadeGerada();
+          if (tabName === 'avaliacao') renderizarAvaliacaoERubrica();
+          if (tabName === 'folha') renderizarFolhaA4();
+          if (tabName === 'slides') {
+            if (!estadoAula.slides || estadoAula.slides.length === 0) {
+              construirSlidesAcessiveis();
+            }
+            renderizarSlidesUI();
+          }
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error("Erro ao alternar aba:", err);
       }
     }
 
@@ -1079,19 +1107,56 @@
 
     // Gerar Plano + Atividade + Avaliação + Folha A4 + Slides
     function gerarPlanejamentoCompleto(mudarAba = true) {
-      coletarDadosFormulario();
-      estadoAula.folhaEditadaHTML = null;
-      construirRubricaPadrao();
-      renderizarAtividadeGerada();
-      renderizarAvaliacaoERubrica();
-      renderizarFolhaA4();
-      construirSlidesAcessiveis();
-      renderizarSlidesUI();
-      salvarNoNavegador();
+      try {
+        coletarDadosFormulario();
+        estadoAula.folhaEditadaHTML = null;
+        construirRubricaPadrao();
+        renderizarAtividadeGerada();
+        renderizarAvaliacaoERubrica();
+        renderizarFolhaA4();
+        construirSlidesAcessiveis();
+        renderizarSlidesUI();
+        salvarNoNavegador();
 
-      if (mudarAba) {
-        switchTab('atividade');
-        mostrarToast("Plano, Avaliação, Folha A4 e Slides gerados e salvos!");
+        if (mudarAba) {
+          switchTab('atividade');
+          mostrarToast("Plano, Avaliação, Folha A4 e Slides gerados e salvos!");
+        }
+      } catch (err) {
+        console.error("Erro ao gerar planejamento completo:", err);
+        mostrarToast("Verifique os campos preenchidos e tente novamente.");
+      }
+    }
+
+    // Renderizar Seção 2: Atividade Adaptada
+    function renderizarAtividadeGerada() {
+      const container = document.getElementById('resultado-atividade-container');
+      const metInfo = DETALHES_METODOLOGIAS[estadoAula.metodologia] || DETALHES_METODOLOGIAS["Rotação por Estações"];
+      const tamanhoGrupo = Math.max(3, Math.ceil(estadoAula.qtdAlunos / 6));
+      const escolaTexto = estadoAula.nomeEscola || "Unidade Escolar não informada";
+      const profTexto = estadoAula.nomeProfessor || "Professor(a) Regente";
+
+      document.getElementById('titulo-plano-gerado').textContent = `${estadoAula.tema} (${estadoAula.disciplina})`;
+
+      // Adaptação específica de cenário e modalidade (incluindo Ensino Técnico)
+      let adaptacaoCenario = "";
+      if (estadoAula.cenarioEscola.includes("Laboratório Técnico")) {
+        adaptacaoCenario = "Em ambiente de laboratório/oficina técnica, sinalize visualmente e tatilmente as bancadas, utilize fichas de segurança passo a passo e garanta circulação acessível entre os equipamentos.";
+      } else if (estadoAula.cenarioEscola.includes("sem projetor")) {
+        adaptacaoCenario = "Como a escola não dispõe de projetor, utilize cartazes em papel pardo/cartolina com letras grandes (mínimo 5cm) e fichas táteis distribuídas nas mesas.";
+      } else if (estadoAula.cenarioEscola.includes("superlotada")) {
+        adaptacaoCenario = "Em sala cheia com carteiras fixas, evite deslocamento físico excessivo: faça os materiais circularem entre as fileiras (rotação de kits) em vez de mover os alunos.";
+      } else if (estadoAula.cenarioEscola.includes("dispositivos digitais")) {
+        adaptacaoCenario = "Aproveite os dispositivos com leitores de tela ativados, ampliação de fonte e recursos audiovisuais legendados.";
+      } else {
+        adaptacaoCenario = "Organize a sala em semicírculo ou ilhas de " + tamanhoGrupo + " estudantes para favorecer o contato visual, a circulação e a mediação.";
+      }
+
+      if (estadoAula.etapa.includes("Ensino Técnico")) {
+        const isIntegrado = estadoAula.etapa.includes("Integrado");
+        adaptacaoCenario += isIntegrado
+          ? " Como se trata de Ensino Técnico Integrado ao Médio, articule a base científica com a prática profissional em etapas bem delimitadas."
+          : " No Ensino Técnico (Subsequente/Concomitante), conecte a atividade à rotina real do mundo do trabalho e às normas de acessibilidade profissional.";
       }
     }
 
@@ -1371,7 +1436,7 @@
     function renderizarFolhaA4() {
       const container = document.getElementById('folha-a4-preview');
       const isAdaptada = estadoAula.versaoFolha === 'adaptada';
-      const metInfo = DETALHES_METODOLOGIAS[estadoAula.metodologia];
+      const metInfo = DETALHES_METODOLOGIAS[estadoAula.metodologia] || DETALHES_METODOLOGIAS["Rotação por Estações"];
 
       if (isAdaptada) {
         container.classList.add('modo-adaptado');
@@ -1380,26 +1445,28 @@
       }
 
       const escolaLabel = estadoAula.nomeEscola || "__________________________________________________";
-            <div class="pt-4 border-t border-slate-200 flex justify-between text-[10px] text-slate-500">
-              <span>${estadoAula.nomeEscola || 'Unidade Escolar'} • Docente: ${estadoAula.nomeProfessor || 'Professor(a) da Matéria'}</span>
-              <span>${estadoAula.disciplina} • ${estadoAula.etapa}</span>
-            </div>
-          </div>
-        `;
-      } else {
-        // VERSÃO ADAPTADA (DUA - Dislexia, TEA, TDAH, Baixa Visão, DI)
+      const profLabel = estadoAula.nomeProfessor || "__________________________________________________";
+
+      if (estadoAula.folhaEditadaHTML) {
+        container.innerHTML = `<div contenteditable="true" onblur="salvarEdicaoFolha(this.innerHTML)" class="outline-none">${estadoAula.folhaEditadaHTML}</div>`;
+        return;
+      }
+
+      if (!isAdaptada) {
+        // VERSÃO PADRÃO A4
         container.innerHTML = `
-          <div contenteditable="true" onblur="salvarEdicaoFolha(this.innerHTML)" class="space-y-6 outline-none">
-            <!-- Cabeçalho Escolar Limpo e Ampliado -->
-            <div class="border-2 border-slate-900 rounded-xl p-4 space-y-3 bg-white">
-              <div class="flex flex-wrap justify-between items-center border-b-2 border-slate-300 pb-2 gap-2">
-                <span class="font-extrabold uppercase text-base">${escolaLabel}</span>
-                <span class="font-bold text-sm">DATA: ____/____/202__</span>
+          <div contenteditable="true" onblur="salvarEdicaoFolha(this.innerHTML)" class="space-y-5 outline-none">
+            <!-- Cabeçalho Escolar -->
+            <div class="border-2 border-slate-800 rounded-lg p-3.5 text-xs space-y-2">
+              <div class="flex flex-wrap justify-between items-center border-b border-slate-300 pb-2 gap-2">
+                <span class="font-extrabold uppercase text-sm">${escolaLabel}</span>
+                <span class="font-bold">Data: ____/____/202__</span>
               </div>
-              <div class="text-sm space-y-1.5">
-                <div><strong>MATÉRIA:</strong> ${estadoAula.disciplina} (${estadoAula.etapa})</div>
-                <div><strong>PROFESSOR(A):</strong> ${profLabel}</div>
-                <div><strong>ESTUDANTE:</strong> ______________________________________________________</div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div><strong>Componente Curricular:</strong> ${estadoAula.disciplina}</div>
+                <div><strong>Turma / Etapa:</strong> ${estadoAula.etapa}</div>
+                <div class="sm:col-span-2"><strong>Professor(a):</strong> ${profLabel}</div>
+                <div class="sm:col-span-2"><strong>Estudante:</strong> ___________________________________________________________</div>
               </div>
             </div>
 
@@ -1440,9 +1507,9 @@
               </div>
             </div>
 
-            <div class="pt-4 border-t border-slate-200 flex justify-between text-[10px] text-slate-400">
-              <span>Material gerado via PlanejaInclusão</span>
-              <span>Coordenação Pedagógica: Profª Coordenadora Bárbara</span>
+            <div class="pt-4 border-t border-slate-200 flex justify-between text-[10px] text-slate-500">
+              <span>${estadoAula.nomeEscola || 'Unidade Escolar'} • Docente: ${estadoAula.nomeProfessor || 'Professor(a) da Matéria'}</span>
+              <span>${estadoAula.disciplina} • ${estadoAula.etapa}</span>
             </div>
           </div>
         `;
@@ -1458,7 +1525,8 @@
               </div>
               <div class="text-sm space-y-1.5">
                 <div><strong>MATÉRIA:</strong> ${estadoAula.disciplina} (${estadoAula.etapa})</div>
-                <div><strong>NOME:</strong> ______________________________________________________</div>
+                <div><strong>PROFESSOR(A):</strong> ${profLabel}</div>
+                <div><strong>ESTUDANTE:</strong> ______________________________________________________</div>
               </div>
             </div>
 
@@ -1524,7 +1592,7 @@
 
     // Construir Deck de Slides Inclusivos
     function construirSlidesAcessiveis() {
-      const metInfo = DETALHES_METODOLOGIAS[estadoAula.metodologia];
+      const metInfo = DETALHES_METODOLOGIAS[estadoAula.metodologia] || DETALHES_METODOLOGIAS["Rotação por Estações"];
       const condicoesTexto = estadoAula.condicoes.join(" • ");
       const escolaTexto = estadoAula.nomeEscola ? `${estadoAula.nomeEscola} • ` : "";
       const profTexto = estadoAula.nomeProfessor || "Professor(a) Regente";
@@ -1853,31 +1921,146 @@
 
     // Exportar Seção Individual (Plano, Rubrica ou Folha A4) Diretamente
     function baixarSecaoHTML(tipo) {
-      coletarDadosFormulario();
-      renderizarAtividadeGerada();
-      renderizarAvaliacaoERubrica();
-      renderizarFolhaA4();
+      try {
+        coletarDadosFormulario();
+        if (!estadoAula.rubrica || estadoAula.rubrica.length === 0) {
+          construirRubricaPadrao();
+        }
+        renderizarAtividadeGerada();
+        renderizarAvaliacaoERubrica();
+        renderizarFolhaA4();
 
-      const escolaTexto = estadoAula.nomeEscola || "Unidade Escolar";
-      const profTexto = estadoAula.nomeProfessor || "Professor(a) da Matéria";
-      let conteudo = "";
-      let tituloDoc = "";
-      let nomeArquivo = "";
+        const escolaTexto = estadoAula.nomeEscola || "Unidade Escolar";
+        const profTexto = estadoAula.nomeProfessor || "Professor(a) da Matéria";
+        let conteudo = "";
+        let tituloDoc = "";
+        let nomeArquivo = "";
 
-      if (tipo === 'plano') {
-        conteudo = document.getElementById('resultado-atividade-container').innerHTML;
-        tituloDoc = `Plano de Aula Inclusivo - ${estadoAula.tema}`;
-        nomeArquivo = `Plano_Inclusivo_${estadoAula.tema.replace(/\s+/g, '_')}.html`;
-      } else if (tipo === 'rubrica') {
-        conteudo = document.getElementById('avaliacao-export-area').innerHTML;
-        tituloDoc = `Rubrica de Avaliação Inclusiva - ${estadoAula.tema}`;
-        nomeArquivo = `Rubrica_Avaliacao_${estadoAula.tema.replace(/\s+/g, '_')}.html`;
-      } else if (tipo === 'folha') {
-        const isAdaptada = estadoAula.versaoFolha === 'adaptada';
-        conteudo = `<div class="folha-a4 ${isAdaptada ? 'modo-adaptado' : ''}">${document.getElementById('folha-a4-preview').innerHTML}</div>`;
-        tituloDoc = `Folha do Aluno (${isAdaptada ? 'Adaptada' : 'Padrão'}) - ${estadoAula.tema}`;
-        nomeArquivo = `Folha_Aluno_${isAdaptada ? 'Adaptada_' : ''}${estadoAula.tema.replace(/\s+/g, '_')}.html`;
+        if (tipo === 'plano') {
+          conteudo = document.getElementById('resultado-atividade-container').innerHTML;
+          tituloDoc = `Plano de Aula Inclusivo - ${estadoAula.tema}`;
+          nomeArquivo = `Plano_Inclusivo_${estadoAula.tema.replace(/\s+/g, '_')}.html`;
+        } else if (tipo === 'rubrica') {
+          conteudo = document.getElementById('avaliacao-export-area').innerHTML;
+          tituloDoc = `Rubrica de Avaliação Inclusiva - ${estadoAula.tema}`;
+          nomeArquivo = `Rubrica_Avaliacao_${estadoAula.tema.replace(/\s+/g, '_')}.html`;
+        } else if (tipo === 'folha') {
+          const isAdaptada = estadoAula.versaoFolha === 'adaptada';
+          conteudo = `<div class="folha-a4 ${isAdaptada ? 'modo-adaptado' : ''}">${document.getElementById('folha-a4-preview').innerHTML}</div>`;
+          tituloDoc = `Folha do Aluno (${isAdaptada ? 'Adaptada' : 'Padrão'}) - ${estadoAula.tema}`;
+          nomeArquivo = `Folha_Aluno_${isAdaptada ? 'Adaptada_' : ''}${estadoAula.tema.replace(/\s+/g, '_')}.html`;
+        }
+
+        const htmlFinal = montarDocumentoExportavel(tituloDoc, escolaTexto, profTexto, conteudo);
+        dispararDownloadHTML(htmlFinal, nomeArquivo);
+        mostrarToast(`${tituloDoc} baixado! Pronto para abrir ou imprimir em PDF.`);
+      } catch (err) {
+        console.error("Erro ao baixar seção:", err);
+        mostrarToast("Erro ao preparar download. Tente gerar o plano primeiro.");
       }
+    }
+
+    // Exportar Pacote Completo (Plano + Rubrica + Folha A4 + Slides)
+    function baixarPacoteCompletoHTML() {
+      try {
+        coletarDadosFormulario();
+        if (!estadoAula.rubrica || estadoAula.rubrica.length === 0) {
+          construirRubricaPadrao();
+        }
+        renderizarAtividadeGerada();
+        renderizarAvaliacaoERubrica();
+        renderizarFolhaA4();
+        construirSlidesAcessiveis();
+
+        const escolaTexto = estadoAula.nomeEscola || "Unidade Escolar";
+        const profTexto = estadoAula.nomeProfessor || "Professor(a) da Matéria";
+
+        const planoHTML = document.getElementById('resultado-atividade-container').innerHTML;
+        const rubricaHTML = document.getElementById('avaliacao-export-area').innerHTML;
+        const folhaHTML = `<div class="folha-a4 ${estadoAula.versaoFolha === 'adaptada' ? 'modo-adaptado' : ''}">${document.getElementById('folha-a4-preview').innerHTML}</div>`;
+        const slidesResumoHTML = estadoAula.slides.map((s, i) => `
+          <div class="bg-white border border-slate-300 rounded-xl p-5 mb-4">
+            <div class="text-xs font-bold uppercase text-blue-700">Slide ${i + 1} • ${s.etiqueta}</div>
+            <h4 class="text-lg font-extrabold text-slate-900 mt-1">${s.titulo}</h4>
+            ${s.subtitulo ? `<p class="text-sm text-slate-600 mt-1">${s.subtitulo}</p>` : ''}
+            ${s.itens ? `<ul class="list-disc pl-5 mt-2 text-sm text-slate-700 space-y-1">${s.itens.map(it => `<li>${it}</li>`).join('')}</ul>` : ''}
+            <p class="text-xs text-slate-500 mt-3 pt-2 border-t border-slate-100"><strong>Audiodescrição:</strong> ${s.audiodescricao}</p>
+          </div>
+        `).join('');
+
+        const conteudoUnificado = `
+          <div class="space-y-8">
+            <div class="bg-slate-900 text-white p-6 rounded-2xl">
+              <p class="text-xs uppercase tracking-wider text-teal-300 font-bold">${escolaTexto}</p>
+              <h1 class="text-2xl font-extrabold mt-1">Pacote Pedagógico Completo: ${estadoAula.tema}</h1>
+              <p class="text-sm text-slate-300 mt-1"><strong>Docente:</strong> ${profTexto} • <strong>Disciplina:</strong> ${estadoAula.disciplina} (${estadoAula.etapa})</p>
+            </div>
+            <section><h2 class="text-lg font-extrabold text-slate-900 mb-3 border-b pb-2">1. Plano de Aula & Metodologia Ativa</h2>${planoHTML}</section>
+            <section class="page-break"><h2 class="text-lg font-extrabold text-slate-900 mb-3 border-b pb-2">2. Critérios de Avaliação & Rubrica Formativa</h2>${rubricaHTML}</section>
+            <section class="page-break"><h2 class="text-lg font-extrabold text-slate-900 mb-3 border-b pb-2">3. Folha de Atividades do Estudante (A4)</h2>${folhaHTML}</section>
+            <section class="page-break"><h2 class="text-lg font-extrabold text-slate-900 mb-3 border-b pb-2">4. Roteiro dos Slides Inclusivos</h2>${slidesResumoHTML}</section>
+          </div>
+        `;
+
+        const htmlFinal = montarDocumentoExportavel(`Pacote Completo - ${estadoAula.tema}`, escolaTexto, profTexto, conteudoUnificado);
+        dispararDownloadHTML(htmlFinal, `Pacote_Completo_${estadoAula.tema.replace(/\s+/g, '_')}.html`);
+        mostrarToast("Pacote Completo da Aula baixado com sucesso!");
+      } catch (err) {
+        console.error("Erro ao baixar pacote completo:", err);
+        mostrarToast("Erro ao gerar pacote completo.");
+      }
+    }
+
+    function montarDocumentoExportavel(titulo, escola, professor, corpoHTML) {
+      const scriptTag = '<scr' + 'ipt src="https://cdn.tailwindcss.com"></scr' + 'ipt>';
+      return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>${titulo} | ${professor}</title>
+  ${scriptTag}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { background: #f1f5f9; padding: 24px; font-family: system-ui, -apple-system, sans-serif; color: #0f172a; }
+    .wrapper { max-width: 960px; margin: 0 auto; }
+    .folha-a4 { background: white; width: 100%; max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 16mm; border: 1px solid #cbd5e1; }
+    .folha-a4.modo-adaptado { background-color: #fffdf5; font-size: 1.15rem; line-height: 1.85; letter-spacing: 0.025em; }
+    .no-print { display: none !important; }
+    @media print {
+      body { background: white; padding: 0; }
+      .wrapper { max-width: 100%; }
+      .page-break { page-break-before: always; }
+      .folha-a4 { border: none; padding: 8mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; background:#ffffff; padding:12px 18px; border-radius:12px; border:1px solid #cbd5e1;" class="barra-topo-print">
+      <span style="font-size:12px; font-weight:700; color:#334155;">${escola} • Docente: ${professor}</span>
+      <button onclick="window.print()" style="background:#1d72f3; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:700; font-size:12px; cursor:pointer;">Imprimir / Salvar PDF</button>
+    </div>
+    ${corpoHTML}
+  </div>
+  <style>@media print { .barra-topo-print { display: none !important; } }</style>
+</body>
+</html>`;
+    }
+
+    function dispararDownloadHTML(conteudoHTML, nomeArquivo) {
+      const blob = new Blob([conteudoHTML], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = nomeArquivo;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 200);
+    }
 
       const htmlFinal = montarDocumentoExportavel(tituloDoc, escolaTexto, profTexto, conteudo);
       dispararDownloadHTML(htmlFinal, nomeArquivo);
